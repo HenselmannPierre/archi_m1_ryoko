@@ -2,7 +2,7 @@ import axios from "axios"
 import { PlaceState, TemperatureState } from "../model/Interfaces"
 import { GooglePlacesInterface } from "./GooglePlacesInterface"
 
-export const weatherAPIKey = "50a7aa80fa492fa92e874d23ad061374"
+export const weatherAPIKey = ""
 
 export const init = ( id : string, temperatureState : TemperatureState, placeState : PlaceState ) => {
     GooglePlacesInterface.getInstance().getPlaceNameFromPlaceId( "city", id, placeState.setter )

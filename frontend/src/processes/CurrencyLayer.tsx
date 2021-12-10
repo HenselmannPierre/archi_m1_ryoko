@@ -3,7 +3,7 @@ import { CountryState, CurrencyState, CurrencyType } from "../model/Interfaces"
 import { GooglePlacesInterface } from "./GooglePlacesInterface"
 
 export const defaultCurrency = "USD"
-export const currencyApiKey = "5941bb294b24b97f3220acda12ff5eab"
+export const currencyApiKey = ""
 
 export const init = (
     setCurrency: React.Dispatch<React.SetStateAction<CurrencyType>>,

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { language } from "../App"
 
-export const googlePlacesAPIKey = "AIzaSyAuZNuP7Unb5FHqnPXSFwYCin4CzDh6t38"
+export const googlePlacesAPIKey = ""
 
 const PROXY_URL = "https://cors-anywhere.herokuapp.com/"
 
