@@ -1,0 +1,183 @@
+<!-- firebase serve -p 5000 -o 127.0.0.1 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Welcome</h1>
+
+  <div id="signInScreenGoogle">
+    <p>Sign in with Google<p>
+    <button id="signInBtnGoogle">Sign in</button>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div id="signUpScreenEmail">
+  <p>Sign up with email</p>
+  <input type="email" placeholder="Type your email" id="emailSignUp">
+  <input type="password" placeholder="Enter your password" id="passwordSignUp">
+  <br>
+  <button id="signUpBtnEmail">Sign up</button>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div id="signInScreenEmail">
+    <p>Sign in with email</p>
+    <input type="email" placeholder="Type your email" id="emailSignIn">
+    <input type="password" placeholder="Enter your password" id="passwordSignIn">
+    <br>
+    <button id="signInBtnEmail">Sign in</button>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div id="signInScreenFacebook">
+    <p>Sign in with Facebook<p>
+    <button id="signInBtnFacebook">Sign in</button>
+  </div>
+
+  <div id="dashboard">
+    <div id="userDetails">
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <button id="signOutBtn">Sign out</button>
+    <!-- <button id="logoutBtn">Logout</button> -->
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+
+  <script>
+      // The web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAuZNuP7Unb5FHqnPXSFwYCin4CzDh6t38",
+        authDomain: "ryoko-b304b.firebaseapp.com",
+        projectId: "ryoko-b304b",
+        storageBucket: "ryoko-b304b.appspot.com",
+        messagingSenderId: "390068753335",
+        appId: "1:390068753335:web:ad92a8833c873f3f920e32"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      document.getElementById('signInScreenEmail').style.display = "block" // visible
+      document.getElementById('dashboard').style.display="none"
+
+      document.getElementById('signInBtnGoogle').addEventListener('click', GoogleSignIn)
+      document.getElementById('signOutBtn').addEventListener('click', SignOutUser)
+
+      document.getElementById('signInBtnEmail').addEventListener('click', EmailSignIn)
+      // document.getElementById('logoutBtn').addEventListener('click', LogoutUser)
+
+      document.getElementById('signInBtnFacebook').addEventListener('click', FacebookSignIn)
+
+      let provider = new firebase.auth.GoogleAuthProvider()
+      let facebookProvider = new firebase.auth.FacebookAuthProvider()
+
+      function GoogleSignIn(){
+        console.log('Google Sign In Button')
+        firebase.auth().signInWithPopup(provider).then(result=>{
+          console.log(result.user)
+          document.getElementById('signInScreenGoogle').style.display="none"
+          document.getElementById('dashboard').style.display="block"
+          showUserDetails(result.user)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
+      // <img src="${user.photoURL}" style="width:10%">
+      // <p>Name: ${user.displayName}</p>
+      function showUserDetails(user){
+        document.getElementById('userDetails').innerHTML = `
+          <p>Email: ${user.email}</p>
+        `
+      }
+
+      function checkAuthState(){
+        firebase.auth().onAuthStateChanged(user=>{
+          if(user){
+            document.getElementById('signInScreenGoogle').style.display="none"
+            document.getElementById('dashboard').style.display="block"
+            document.getElementById('signInScreenEmail').style.display="none"
+            document.getElementById('signUpScreenEmail').style.display="none"
+            document.getElementById('signInScreenFacebook').style.display="none"
+            showUserDetails(user)
+          }else{
+            document.getElementById('signInScreenEmail').style.display = "block"
+            document.getElementById('dashboard').style.display = "none"
+            document.getElementById('signInScreenGoogle').style.display="block"
+            document.getElementById('signUpScreenEmail').style.display="block"
+            document.getElementById('signInScreenFacebook').style.display="block"
+          }
+        })
+      }
+
+      function EmailSignIn(){
+        console.log('Email Sign In Button')
+        let email = document.getElementById('emailSignIn').value
+        let password = document.getElementById('passwordSignIn').value
+
+        // Creating a user
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(e=>{
+          console.log(e)
+        })
+      }
+
+      function FacebookSignIn(){
+        console.log('Facebook Sign In Button')
+        firebase.auth().signInWithPopup(facebookProvider).then(result=>{
+          console.log(result.user)
+          document.getElementById('signInScreenFacebook').style.display="none"
+          document.getElementById('dashboard').style.display="block"
+          showUserDetails(result.user)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
+      
+      function SignOutUser(){
+        console.log('Sign Out Button')
+        firebase.auth().signOut().then(()=>{
+          document.getElementById('signInScreenGoogle').style.display="block"
+          document.getElementById('dashboard').style.display="none"
+
+          document.getElementById('signInScreenEmail').style.display="block"
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
+
+      document.getElementById('signUpBtnEmail').addEventListener('click', EmailSignUp)
+
+      function EmailSignUp(){
+        console.log('Email Sign Up Button')
+        let email = document.getElementById('emailSignUp').value
+        let password = document.getElementById('passwordSignUp').value
+
+        // Creating a user
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(e=>{
+          console.log(e)
+        })
+      }
+
+      checkAuthState()
+    </script>
+
+</body>
+</html>
